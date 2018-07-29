@@ -1,5 +1,5 @@
 
-from js9 import j
+from jumpscale import j
 import os
 mypath = j.sal.fs.getDirName(os.path.abspath(__file__))
 
