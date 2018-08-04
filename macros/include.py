@@ -17,7 +17,7 @@ def include(doc, name, **args):
                 doc = None
                 
         if doc != None:            
-            newcontent = doc.markdown_processed
+            newcontent = doc.markdown
         else:
             raise RuntimeError("ERROR: COULD NOT INCLUDE:%s (not found)" % name)
 
@@ -26,7 +26,7 @@ def include(doc, name, **args):
         docsite = j.tools.markdowndocs.docsite_get(docsiteName)
         doc = docsite.doc_get(name, die=False)
         if doc != None:
-            newcontent = doc.markdown_processed
+            newcontent = doc.markdown
         else:
             raise RuntimeError("ERROR: COULD NOT INCLUDE:%s:%s (not found)" % (docsiteName, name))
 
