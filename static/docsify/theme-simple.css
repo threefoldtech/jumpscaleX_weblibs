@@ -1086,11 +1086,11 @@ main {
     min-height: 100vh
 }
 
-@media (min-width: 48em) {
+/* @media (min-width: 48em) {
     main>.content {
         margin-left: var(--sidebar-width)
     }
-}
+} */
 
 .sidebar {
     display: -ms-flexbox;
