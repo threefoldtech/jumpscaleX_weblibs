@@ -17,8 +17,6 @@
 ## macro without code block
 
 
-!!!include("core9:macros")
+!!!include("test5")
 
-this is just a block of text
-lets see
 

@@ -1,3 +1,5 @@
 
 importance= "superhigh"
-somelist= ["zz"]
+somelist= ["zz","yy"]
+
+color = 'green'

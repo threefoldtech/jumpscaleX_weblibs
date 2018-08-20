@@ -6,7 +6,7 @@ def include(doc, name, **args):
         if doc==None:
             #walk over all docsites
             res=[]
-            for key,ds in j.tools.markdowndocs.docsites.items():
+            for key,ds in j.tools.docsites.docsites.items():
                 doc = ds.doc_get(name, die=False)
                 if doc != None:
                     res.append(doc)
@@ -23,7 +23,7 @@ def include(doc, name, **args):
 
     else:
         docsiteName, name = name.split(":")
-        docsite = j.tools.markdowndocs.docsite_get(docsiteName)
+        docsite = j.tools.docsites.docsite_get(docsiteName)
         doc = docsite.doc_get(name, die=False)
         if doc != None:
             newcontent = doc.markdown
