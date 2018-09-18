@@ -1,4 +1,4 @@
-from jumpscale import j
+from Jumpscale import j
 import os
 mypath = j.sal.fs.getDirName(os.path.abspath(__file__))
 def _lib_add(self):
