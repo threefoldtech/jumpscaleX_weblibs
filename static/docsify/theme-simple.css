@@ -1330,13 +1330,13 @@ main {
 }
 
 .sidebar-nav>ul>li>ul>li>ul>li>a:before {
-    content: var(--sidebar-nav-link-before-content-l3, var(--sidebar-nav-link-before-content));
+    /* content: var(--sidebar-nav-link-before-content-l3, var(--sidebar-nav-link-before-content)); */
     margin: var(--sidebar-nav-link-before-margin-l3, var(--sidebar-nav-link-before-margin));
     color: var(--sidebar-nav-link-before-color-l3, var(--sidebar-nav-link-before-color))
 }
 
 .sidebar-nav>ul>li>ul>li>ul>li.active>a:before {
-    content: var(--sidebar-nav-link-before-content-l3--active, var(--sidebar-nav-link-before-content--active, var(--sidebar-nav-link-before-content-l3, var(--sidebar-nav-link-before-content))));
+    /* content: var(--sidebar-nav-link-before-content-l3--active, var(--sidebar-nav-link-before-content--active, var(--sidebar-nav-link-before-content-l3, var(--sidebar-nav-link-before-content)))); */
     color: var(--sidebar-nav-link-before-color-l3--active, var(--sidebar-nav-link-before-color--active, var(--sidebar-nav-link-before-color-l3, var(--sidebar-nav-link-before-color))))
 }
 
