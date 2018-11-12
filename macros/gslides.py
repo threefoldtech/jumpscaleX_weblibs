@@ -1,4 +1,4 @@
-
+from Jumpscale import j
 def gslides(doc, name, content):
 
     md5 = j.data.hash.md5_string(content)
