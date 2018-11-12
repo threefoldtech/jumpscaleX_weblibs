@@ -1,4 +1,4 @@
-
+from Jumpscale import j
 def _file_process(content,start="",end="",part=""):
     content = j.core.text.strip(content)
     if start=="" and end=="" and part=="":

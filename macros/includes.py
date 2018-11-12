@@ -1,4 +1,4 @@
-
+from Jumpscale import j
 def includes(doc, path, title=3, **args):
 
     spath = j.sal.fs.processPathForDoubleDots(j.sal.fs.joinPaths(j.sal.fs.getDirName(doc.path), path))
