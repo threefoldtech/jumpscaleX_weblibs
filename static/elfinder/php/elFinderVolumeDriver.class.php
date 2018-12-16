@@ -3762,8 +3762,8 @@ abstract class elFinderVolumeDriver {
 			}
 		}
 		
-		if ($tmpdir = $this->getTempPath()) {
-			$name = tempnam($tmpdir, 'ELF');
+		if ({DIR_TEMP} = $this->getTempPath()) {
+			$name = tempnam({DIR_TEMP}, 'ELF');
 			if ($key) {
 				$cache[$key] = $name;
 			}
@@ -3855,10 +3855,10 @@ abstract class elFinderVolumeDriver {
 		static $totalSize = 0;
 		if (is_null($dir)) {
 			$totalSize = 0;
-			if (! $tmpDir = $this->getTempPath()) {
+			if (! {DIR_TEMP} = $this->getTempPath()) {
 				return false;
 			}
-			$dir = tempnam($tmpDir, 'elf');
+			$dir = tempnam({DIR_TEMP}, 'elf');
 			if (!unlink($dir) || !mkdir($dir, 0700, true)) {
 				return false;
 			}

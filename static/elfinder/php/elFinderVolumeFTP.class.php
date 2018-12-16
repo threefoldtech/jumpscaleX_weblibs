@@ -1477,20 +1477,20 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 		// get current directory
 		$cwd = getcwd();
 
-		$tmpDir = $this->tempDir();
-		if (!$tmpDir) {
+		{DIR_TEMP} = $this->tempDir();
+		if (!{DIR_TEMP}) {
 			return false;
 		}
 
 		//download data
-		if (!$this->ftp_download_files($dir, $files, $tmpDir)) {
+		if (!$this->ftp_download_files($dir, $files, {DIR_TEMP})) {
 			//cleanup
-			$this->rmdirRecursive($tmpDir);
+			$this->rmdirRecursive({DIR_TEMP});
 			return false;
 		}
 
 		$remoteArchiveFile = false;
-		if ($path = $this->makeArchive($tmpDir, $files, $name, $arc)) {
+		if ($path = $this->makeArchive({DIR_TEMP}, $files, $name, $arc)) {
 			$remoteArchiveFile = $this->_joinPath($dir, $name);
 			if (!ftp_put($this->connect, $remoteArchiveFile, $path, FTP_BINARY)) {
 				$remoteArchiveFile = false;
@@ -1498,7 +1498,7 @@ class elFinderVolumeFTP extends elFinderVolumeDriver {
 		}
 
 		//cleanup
-		if(!$this->rmdirRecursive($tmpDir)) {
+		if(!$this->rmdirRecursive({DIR_TEMP})) {
 			return false;
 		}
 
