@@ -4,7 +4,7 @@ for examples of graphiz see
 
 - http://www.graphviz.org/Gallery.php
 
-```js
+```
 !!!dot("dot_test")
 digraph G {
 
@@ -44,7 +44,7 @@ for examples of graphiz see
 
 - http://www.graphviz.org/Gallery.php
 
-\`\`\`js
+```python
 !!!dot("dot_test")
 digraph G {
 
@@ -73,7 +73,6 @@ digraph G {
 	start [shape=Mdiamond];
 	end [shape=Msquare];
 }
-\`\`\`
 
 ```
 

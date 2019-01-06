@@ -1,9 +1,17 @@
-
 ## data coming out of data.toml
 
-{{importance}}
+high
 
-{% for item in somelist %}
-- {{item}}
-{% endfor %}
+
+
+- a
+
+
+
+- b
+
+
+
+- c
+
 

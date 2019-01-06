@@ -13,6 +13,8 @@
 
 ![](Piggy Bank_401.png)
 
+![](https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?cs=srgb&dl=beauty-bloom-blue-67636.jpg&fm=jpg)
+
 - [Present](http://farming_slides.threefold.me)
 - [Google Drive](https://docs.google.com/presentation/d/11FE7i7DkBO39pYzPpIp_mdafiHdPUMuWN0BoIM0KFjc/edit?usp=drive_web&ouid=101460153806293923139)
 
