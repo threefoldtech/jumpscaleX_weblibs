@@ -1,6 +1,6 @@
 # jumpscale_weblibs
 
-javascript libraries used in many of our projects
+javascript and css libraries used in many of our web projects. Please include them in your projects from here instead of adding same library for every project.
 
 Repo Owner: [@arahman.hamdy](https://github.com/arahmanhamdy)
 
