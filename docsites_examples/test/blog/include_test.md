@@ -45,7 +45,7 @@ codeblock = True
 
 ### possibility 2: use the paragraph argument
 
-```macro
+```
 !!!include
 name = "Fixer.py"
 repo = "https://github.com/threefoldtech/jumpscaleX/tree/master/Jumpscale/tools/fixer"
