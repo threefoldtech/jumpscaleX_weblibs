@@ -950,3 +950,13 @@ pre:after {
     text-align: right;
     top: 0
 }
+
+
+body.no-sidebar .sidebar,
+body.no-sidebar .sidebar-toggle {
+    display: none !important;
+}
+
+body.no-sidebar .content {
+    left: 0px !important;
+}
