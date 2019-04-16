@@ -42,9 +42,6 @@ TeamWidgetService.prototype = {
     get_team_template: function(members) {
         var self = this;
         var member_templates = $.map(members, function(member) {
-            if (!member.avatar.startsWith('/')) {
-                member.avatar = window.location.pathname + '/' + member.avatar;
-            }
             return self.get_member_template(member)
         });
 
@@ -58,11 +55,31 @@ TeamWidgetService.prototype = {
     },
 
     shuffle: function(dataset) {
+        // https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+        var j, x, i;
+        for (i = dataset.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = dataset[i];
+            dataset[i] = dataset[j];
+            dataset[j] = x;
+        }
         return dataset;
     },
 
     sort: function(dataset, prop, defaultValue) {
-        return dataset;
+        function setDefaultValue(member) {
+            // 0 means unset too
+            if (!member[prop]) {
+                member[prop] = defaultValue;
+            }
+        }
+
+        return dataset.sort(function(memberA, memberB) {
+            setDefaultValue(memberA);
+            setDefaultValue(memberB);
+
+            return memberA[prop] > memberB[prop];
+        });
     },
 
     render: function (dataset, order) {
