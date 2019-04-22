@@ -1,14 +1,13 @@
-const GEDIS_CLIENT = (function(){
-    console.log(SERVER);
-    var socket = new WebSocket(SERVER);
-    let connected = false;
+const client = (function(){
+    let socket = new WebSocket(SERVER);
+    let connected = false
     let connect = ()=> {
         return new Promise(res =>{
             if(!connected){
                 socket.onopen = () => {
-                    connected = true
-                    res(true)
-                }
+                connected = true
+                res(true)
+            }
             } else {
                 res(true)
             }
@@ -37,3 +36,7 @@ const GEDIS_CLIENT = (function(){
     };
     return client
 })()
+
+export {
+    client as default
+}
