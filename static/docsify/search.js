@@ -85,84 +85,89 @@ function genIndex(path, content, router, depth) {
  * @returns {Array}
  */
 function search(query) {
-  var matchingResults = [];
-  var data = [];
-  Object.keys(INDEXS).forEach(function (key) {
-    data = data.concat(Object.keys(INDEXS[key]).map(function (page) { return INDEXS[key][page]; }));
-  });
-
-  query = query.trim();
-  var keywords = query.split(/[\s\-，\\/]+/);
-  if (keywords.length !== 1) {
-    keywords = [].concat(query, keywords);
-  }
-
-  var loop = function ( i ) {
-    var post = data[i];
-    var isMatch = false;
-    var resultStr = '';
-    var postTitle = post.title && post.title.trim();
-    var postContent = post.body && post.body.trim();
-    var postUrl = post.slug || '';
-
-    if (postTitle && postContent) {
-      keywords.forEach(function (keyword) {
-        // From https://github.com/sindresorhus/escape-string-regexp
-        var regEx = new RegExp(
-          keyword.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&'),
-          'gi'
-        );
-        var indexTitle = -1;
-        var indexContent = -1;
-
-        indexTitle = postTitle && postTitle.search(regEx);
-        indexContent = postContent && postContent.search(regEx);
-
-        if (indexTitle < 0 && indexContent < 0) {
-          isMatch = false;
-        } else {
-          isMatch = true;
-          if (indexContent < 0) {
-            indexContent = 0;
-          }
-
-          var start = 0;
-          var end = 0;
-
-          start = indexContent < 11 ? 0 : indexContent - 10;
-          end = start === 0 ? 70 : indexContent + keyword.length + 60;
-
-          if (end > postContent.length) {
-            end = postContent.length;
-          }
-
-          var matchContent =
-            '...' +
-            escapeHtml(postContent)
-              .substring(start, end)
-              .replace(regEx, ("<em class=\"search-keyword\">" + keyword + "</em>")) +
-            '...';
-
-          resultStr += matchContent;
-        }
-      });
-
-      if (isMatch) {
-        var matchingPost = {
-          title: escapeHtml(postTitle),
-          content: resultStr,
-          url: postUrl
-        };
-
-        matchingResults.push(matchingPost);
-      }
-    }
-  };
-
-  for (var i = 0; i < data.length; i++) loop( i );
-
-  return matchingResults
+    name = options.namespace
+    console.log("before");
+    sonic_search(name, query).then((res) => {alert(res)})
+    console.log("after");
 }
+//  var matchingResults = [];
+//  var data = [];
+//  Object.keys(INDEXS).forEach(function (key) {
+//    data = data.concat(Object.keys(INDEXS[key]).map(function (page) { return INDEXS[key][page]; }));
+//  });
+//
+//  query = query.trim();
+//  var keywords = query.split(/[\s\-，\\/]+/);
+//  if (keywords.length !== 1) {
+//    keywords = [].concat(query, keywords);
+//  }
+//
+//  var loop = function ( i ) {
+//    var post = data[i];
+//    var isMatch = false;
+//    var resultStr = '';
+//    var postTitle = post.title && post.title.trim();
+//    var postContent = post.body && post.body.trim();
+//    var postUrl = post.slug || '';
+//
+//    if (postTitle && postContent) {
+//      keywords.forEach(function (keyword) {
+//        // From https://github.com/sindresorhus/escape-string-regexp
+//        var regEx = new RegExp(
+//          keyword.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&'),
+//          'gi'
+//        );
+//        var indexTitle = -1;
+//        var indexContent = -1;
+//
+//        indexTitle = postTitle && postTitle.search(regEx);
+//        indexContent = postContent && postContent.search(regEx);
+//
+//        if (indexTitle < 0 && indexContent < 0) {
+//          isMatch = false;
+//        } else {
+//          isMatch = true;
+//          if (indexContent < 0) {
+//            indexContent = 0;
+//          }
+//
+//          var start = 0;
+//          var end = 0;
+//
+//          start = indexContent < 11 ? 0 : indexContent - 10;
+//          end = start === 0 ? 70 : indexContent + keyword.length + 60;
+//
+//          if (end > postContent.length) {
+//            end = postContent.length;
+//          }
+//
+//          var matchContent =
+//            '...' +
+//            escapeHtml(postContent)
+//              .substring(start, end)
+//              .replace(regEx, ("<em class=\"search-keyword\">" + keyword + "</em>")) +
+//            '...';
+//
+//          resultStr += matchContent;
+//        }
+//      });
+//
+//      if (isMatch) {
+//        var matchingPost = {
+//          title: escapeHtml(postTitle),
+//          content: resultStr,
+//          url: postUrl
+//        };
+//
+//        matchingResults.push(matchingPost);
+//      }
+//    }
+//  };
+//
+//  for (var i = 0; i < data.length; i++) loop( i );
+//
+//  return matchingResults
+//}
 
 function init$1(config, vm) {
   var isAuto = config.paths === 'auto';
@@ -233,20 +238,23 @@ function doSearch(value) {
     }
     return
   }
-  var matchs = search(value);
+  sonic_search(name, value).then((res) => {
+      var matchs = JSON.parse(res)["res"]
+      console.log("*****")
+      console.log(matchs)
+      var html = '';
+      matchs.forEach(function (post) {
+        html += "<div class=\"matching-post\">\n<a href=\"/#/" + (post) + "\">\n<h2>" + (post) + "</h2></a>\n</div>";
+      });
 
-  var html = '';
-  matchs.forEach(function (post) {
-    html += "<div class=\"matching-post\">\n<a href=\"" + (post.url) + "\">\n<h2>" + (post.title) + "</h2>\n<p>" + (post.content) + "</p>\n</a>\n</div>";
-  });
-
-  $panel.classList.add('show');
-  $clearBtn.classList.add('show');
-  $panel.innerHTML = html || ("<p class=\"empty\">" + NO_DATA_TEXT + "</p>");
-  if (options.hideOtherSidebarContent) {
-    $sidebarNav.classList.add('hide');
-    $appName.classList.add('hide');
-  }
+      $panel.classList.add('show');
+      $clearBtn.classList.add('show');
+      $panel.innerHTML = html || ("<p class=\"empty\">" + NO_DATA_TEXT + "</p>");
+      if (options.hideOtherSidebarContent) {
+        $sidebarNav.classList.add('hide');
+        $appName.classList.add('hide');
+      }
+  })
 }
 
 function bindEvents() {
@@ -303,7 +311,6 @@ function updateOptions(opts) {
 
 function init(opts, vm) {
   var keywords = vm.router.parse().query.s;
-
   updateOptions(opts);
   style();
   tpl(keywords);

@@ -1,11 +1,12 @@
-const client = (function(){
-    let socket = new WebSocket(SERVER);
-    let connected = false
+const GEDIS_CLIENT = (function(){
+    let client = {};
+    client.socket = new WebSocket(SERVER);
+    client.connected = false
     let connect = ()=> {
         return new Promise(res =>{
-            if(!connected){
-                socket.onopen = () => {
-                connected = true
+            if(!client.connected){
+                client.socket.onopen = () => {
+                client.connected = true
                 res(true)
             }
             } else {
@@ -21,15 +22,13 @@ const client = (function(){
                     "args": args,
                     "headers": headers,
                 }
-                socket.send(JSON.stringify(message))
-                socket.onmessage = function(e) {
+                client.socket.send(JSON.stringify(message))
+                client.socket.onmessage = function(e) {
                     resolve(e.data)
                 }
             })
         })
     }
-
-    let client = {};
     client.execute = async (info) => {
         return await execute(info['namespace'], info['actor'], info['command'],
                              info['args'], info['headers'])
@@ -37,6 +36,5 @@ const client = (function(){
     return client
 })()
 
-export {
-    client as default
-}
+info = {"namespace":"default", "actor":"system", "command":"ping"}
+GEDIS_CLIENT.execute(info).then(res => console.log(res));
