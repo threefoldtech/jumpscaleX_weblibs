@@ -1,4 +1,4 @@
-const BASE_URL = "/wiki_static"
+const BASE_URL = "/docsites"
 var converter = new showdown.Converter();
 
 var makeRequest = function(url, varsObj) {
@@ -32,6 +32,13 @@ var parseResponse = function(contents, varsObj) {
     }
     varsObj.content = converter.makeHtml(matches[2].trim());
 };
+
+var removeLoadingDiv = function() {
+    var el = document.getElementById('loading-div');
+    if (el) {
+        el.remove();
+    }
+}
 
 document.addEventListener("DOMContentLoaded", function(){
     let pageSrc = document.body.innerHTML;
@@ -68,5 +75,7 @@ document.addEventListener("DOMContentLoaded", function(){
                                 e => ({e, status: "rejected" }));
     Promise.all(promises.map(reflect)).then(() => {
         document.body.innerHTML = template(tokens);
+        // remove loading div
+        removeLoadingDiv();
     });
 });
