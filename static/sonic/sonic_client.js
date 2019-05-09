@@ -1,6 +1,5 @@
 sonic_search = function (name, query)
 {
-    console.log("inside");
     var info = {
         "namespace": "default",
         "actor": "sonic",
@@ -10,4 +9,3 @@ sonic_search = function (name, query)
     }
     return GEDIS_CLIENT.execute(info)
 }
-sonic_search("abdo", "dev").then((res) => {console.log(res)})
