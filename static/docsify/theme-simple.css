@@ -357,7 +357,7 @@ pre[data-lang] {
 
 .markdown-section a {
     border-bottom: var(--link-border-bottom);
-    color: var(--link-color);
+/*     color: var(--link-color); */
     text-decoration: var(--link-text-decoration);
     text-decoration-color: var(--link-text-decoration-color)
 }
