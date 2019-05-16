@@ -17,10 +17,11 @@
  */
 
 function TeamWidgetService() {
+    this.avatarPrefix = ''
 }
 
 TeamWidgetService.prototype = {
-    get_member_template: function(member) {
+    get_member_template: function (member) {
         return `
             <div class="rj-team-member">
                 <div class="member-photo"><img class="rj-team-member-photo-rollover"
@@ -39,11 +40,13 @@ TeamWidgetService.prototype = {
             `
     },
 
-    get_team_template: function(members) {
+    get_team_template: function (members) {
         var self = this;
-        var member_templates = $.map(members, function(member) {
+        var member_templates = $.map(members, function (member) {
             if (!member.avatar) {
                 member.avatar = UNKOWN_AVATAR;
+            } else {
+                member.avatar = self.avatarPrefix + '/' + member.avatar;
             }
             return self.get_member_template(member)
         });
@@ -51,13 +54,13 @@ TeamWidgetService.prototype = {
         return `
             <div class="team">
                 <div class="rj-team">
-                    ${ member_templates.join('\n') }
+                    ${ member_templates.join('\n')}
                 </div>
             </div>
         `
     },
 
-    shuffle: function(dataset) {
+    shuffle: function (dataset) {
         // https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
         var j, x, i;
         for (i = dataset.length - 1; i > 0; i--) {
@@ -69,7 +72,7 @@ TeamWidgetService.prototype = {
         return dataset;
     },
 
-    sort: function(dataset, prop, defaultValue) {
+    sort: function (dataset, prop, defaultValue) {
         function setDefaultValue(member) {
             // 0 means unset too
             if (!member[prop]) {
@@ -77,7 +80,7 @@ TeamWidgetService.prototype = {
             }
         }
 
-        return dataset.sort(function(memberA, memberB) {
+        return dataset.sort(function (memberA, memberB) {
             setDefaultValue(memberA);
             setDefaultValue(memberB);
 
@@ -95,12 +98,13 @@ TeamWidgetService.prototype = {
         } else {
             throw Error('order should be "random" or "rank"');
         }
+
         return this.get_team_template(dataset);
     },
 
-    setupHandlers: function() {
+    setupHandlers: function () {
         // toggle bio handlers
-        $(document).on("click", ".rj-team-member .member-photo", function(event) {
+        $(document).on("click", ".rj-team-member .member-photo", function (event) {
             event.preventDefault();
             event.stopPropagation();
             $(this).parent().siblings().children(".member-photo").removeClass("selected"), $(this).toggleClass("selected"), $(this).parent().siblings().children(".rj-team-member-info-text").hide(), $(this).siblings(".rj-team-member-info-text").toggle();
@@ -124,6 +128,26 @@ TeamWidgetService.prototype = {
             $(a.target).closest(".rj-team-member .member-photo").length || $(".rj-team-member .member-photo").is(":visible") && ($(".rj-team-member-info-text").hide(), $(".member-photo").removeClass("selected"))
         });
     },
+
+    init: function () {
+        var self = this;
+
+        $('.team-container').each(function (i, container) {
+            container = $(container);
+            var codeContainer = container.find('code');
+            if (!codeContainer) {
+                return;
+            }
+            var text = codeContainer.text();
+            if (text.startsWith('team')) {
+                text = text.slice(4);
+            }
+            var data = JSON.parse(text);
+            container.html(self.render(data.dataset, data.order));
+        });
+
+        self.setupHandlers();
+    }
 };
 
 
