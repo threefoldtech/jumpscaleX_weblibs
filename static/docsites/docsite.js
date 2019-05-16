@@ -1,13 +1,18 @@
 const BASE_URL = "/docsites"
 var converter = new showdown.Converter();
 
-var makeRequest = function (url, varsObj) {
+function DocSite(onLoaded) {
+    this.docsiteLoaded = onLoaded || function () { };
+}
+
+DocSite.prototype.makeRequest = function (url, varsObj) {
+    var self = this;
     var request = new XMLHttpRequest();
     return new Promise(function (resolve, reject) {
         request.onreadystatechange = function () {
             if (request.readyState !== 4) return;
             if (request.status >= 200 && request.status < 300) {
-                parseResponse(request.responseText, varsObj);
+                self.parseResponse(request.responseText, varsObj);
                 resolve()
             } else {
                 reject({
@@ -20,8 +25,7 @@ var makeRequest = function (url, varsObj) {
         request.send();
     });
 };
-
-var parseResponse = function (contents, varsObj) {
+DocSite.prototype.parseResponse = function (contents, varsObj) {
     var matches = contents.match(/\++([^\+]+)\++([^]*)/i);
     var variablesLines = matches[1].trim().split("\n");
     for (let i in variablesLines) {
@@ -32,22 +36,20 @@ var parseResponse = function (contents, varsObj) {
     }
     varsObj.content = converter.makeHtml(matches[2].trim());
 };
-
-var removeLoadingDiv = function () {
+DocSite.prototype.removeLoadingDiv = function () {
     var el = document.getElementById('loading-div');
     if (el) {
         el.remove();
     }
 }
-
-function hasHandlebars(s) {
+DocSite.prototype.hasHandlebars = function (s) {
     if (!s) {
         return;
     }
     return s.includes('{{{') && s.includes('}}}');
 }
-
-function getHandlebarsWithElements() {
+DocSite.prototype.getHandlebarsWithElements = function () {
+    var self = this;
     let all = [];
 
     // search elements with text content or attributes that contain "{{{" and "}}}"
@@ -61,11 +63,11 @@ function getHandlebarsWithElements() {
 
     let node = result.iterateNext();
     while (node) {
-        if (!hasHandlebars(node.textContent)) {
+        if (!self.hasHandlebars(node.textContent)) {
             // one of the attributes, not the content
             for (let i in node.attributes) {
                 let attr = node.attributes[i];
-                if (hasHandlebars(attr.value)) {
+                if (self.hasHandlebars(attr.value)) {
                     all.push({
                         element: node,
                         reference: attr.value,
@@ -85,10 +87,9 @@ function getHandlebarsWithElements() {
 
     return all;
 }
-
-
-window.addEventListener("load", function () {
-    let handles = getHandlebarsWithElements();
+DocSite.prototype.onWindowLoaded = function () {
+    var self = this;
+    let handles = self.getHandlebarsWithElements();
     let references = handles.map(function (element) {
         return element.reference;
     });
@@ -116,7 +117,7 @@ window.addEventListener("load", function () {
     for (let docSite in tokens) {
         for (let mdPath in tokens[docSite]) {
             let url = `${BASE_URL}/${docSite}/${mdPath.replace(/\./g, "/")}.md`;
-            promises.push(makeRequest(url, tokens[docSite][mdPath]));
+            promises.push(self.makeRequest(url, tokens[docSite][mdPath]));
         }
     }
 
@@ -137,6 +138,10 @@ window.addEventListener("load", function () {
             }
         }
         // remove loading div
-        removeLoadingDiv();
+        self.removeLoadingDiv();
+        self.docsiteLoaded();
     });
-});
+};
+DocSite.prototype.init = function () {
+    window.addEventListener("load", this.onWindowLoaded.bind(this));
+}
