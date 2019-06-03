@@ -52,37 +52,33 @@ DocSite.prototype.getHandlebarsWithElements = function () {
     var self = this;
     let all = [];
 
-    // search elements with text content or attributes that contain "{{{" and "}}}"
-    let result = document.evaluate(
-        "//*[contains(text(),'{{{') and contains(text(),'}}}') or @*[contains(., '{{{') and contains(., '}}}')]]",
-        document,
-        null,
-        XPathResult.ORDERED_NODE_ITERATOR_TYPE,
-        null
-    );
+    let iter = document.createNodeIterator(
+        document.body, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, null);
+    let node = iter.nextNode();
 
-    let node = result.iterateNext();
     while (node) {
-        if (!self.hasHandlebars(node.textContent)) {
-            // one of the attributes, not the content
-            for (let i in node.attributes) {
-                let attr = node.attributes[i];
-                if (self.hasHandlebars(attr.value)) {
-                    all.push({
-                        element: node,
-                        reference: attr.value,
-                        attr: attr.name,
-                    });
-                }
+        if (node.nodeType == Node.TEXT_NODE) {
+            if (self.hasHandlebars(node.textContent)) {
+                all.push({
+                    element: node,
+                    reference: node.textContent,
+                });
             }
-        } else {
-            all.push({
-                element: node,
-                reference: node.textContent,
-            });
         }
 
-        node = result.iterateNext();
+        // maybe any attribute too
+        for (let i in node.attributes) {
+            let attr = node.attributes[i];
+            if (self.hasHandlebars(attr.value)) {
+                all.push({
+                    element: node,
+                    reference: attr.value,
+                    attr: attr.name,
+                });
+            }
+        }
+
+        node = iter.nextNode();
     }
 
     return all;
@@ -90,8 +86,8 @@ DocSite.prototype.getHandlebarsWithElements = function () {
 DocSite.prototype.onWindowLoaded = function () {
     var self = this;
     let handles = self.getHandlebarsWithElements();
-    let references = handles.map(function (element) {
-        return element.reference;
+    let references = handles.map(function (handle) {
+        return handle.reference;
     });
     let tokenizer = Handlebars.parse(references.join("\n"));
     let tokens = {}
@@ -130,11 +126,14 @@ DocSite.prototype.onWindowLoaded = function () {
         for (let i in handles) {
             let handle = handles[i];
             let value = Handlebars.compile(handle.reference)(tokens);
+            // value can be only text content or an html string
             if (handle.attr) {
                 handle.element.setAttribute(handle.attr, value);
             } else {
-                // no attribute, update inner html
-                handle.element.innerHTML = value;
+                // if not an attribute, replace the element itself with a new fragment
+                // that contains one or more elements (or even a single text element)
+                let frag = document.createRange().createContextualFragment(value);
+                handle.element.replaceWith(frag);
             }
         }
         // remove loading div
