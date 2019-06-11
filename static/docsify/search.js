@@ -238,13 +238,11 @@ function doSearch(value) {
     }
     return
   }
-  sonic_search(name, value).then((res) => {
-      var matchs = JSON.parse(res)["res"]
-      console.log("*****")
-      console.log(matchs)
+  sonic_search(value).then((res) => {
+      var matches = JSON.parse(res)["res"]
       var html = '';
-      matchs.forEach(function (post) {
-        html += "<div class=\"matching-post\">\n<a href=\"/#/" + (post) + "\">\n<h2>" + (post) + "</h2></a>\n</div>";
+      matches.forEach(function (post) {
+        html += "<div class=\"matching-post\">\n<a href=\"#/" + (post) + "\">\n<h2>" + (post) + "</h2></a>\n</div>";
       });
 
       $panel.classList.add('show');
