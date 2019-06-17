@@ -1,5 +1,5 @@
 function TeamWidgetPlugin() {
-    return function(hook) {
+    return function (hook) {
         hook.ready(() => {
             TeamWidget.setupHandlers();
         });

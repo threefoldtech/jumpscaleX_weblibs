@@ -84,7 +84,15 @@ TeamWidgetService.prototype = {
             setDefaultValue(memberA);
             setDefaultValue(memberB);
 
-            return memberA[prop] > memberB[prop];
+            var valueA = memberA[prop], valueB = memberB[prop];
+
+            if (valueA > valueB) {
+                return 1;
+            } else if (valueA < valueB) {
+                return -1;
+            } else {
+                return 0;
+            }
         });
     },
 
