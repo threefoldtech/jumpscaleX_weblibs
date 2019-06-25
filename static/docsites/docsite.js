@@ -29,9 +29,10 @@ DocSite.prototype.parseResponse = function (contents, varsObj) {
     var matches = contents.match(/\++([^\+]+)\++([^]*)/i);
     var variablesLines = matches[1].trim().split("\n");
     for (let i in variablesLines) {
-        let lineParts = variablesLines[i].split("=")
-        if (lineParts.length === 2) {
-            varsObj[lineParts[0].trim()] = lineParts[1].trim().replace(/'/g, "").replace(/"/g, "");
+        let line = variablesLines[i];
+        if (line.includes('=')) {
+            const [name, ...values] = line.split('=');
+            varsObj[name.trim()] = values.join('').trim().replace(/'/g, "").replace(/"/g, "");
         }
     }
     varsObj.content = converter.makeHtml(matches[2].trim());
