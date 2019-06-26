@@ -32,7 +32,7 @@ DocSite.prototype.parseResponse = function (contents, varsObj) {
         let line = variablesLines[i];
         if (line.includes('=')) {
             const [name, ...values] = line.split('=');
-            varsObj[name.trim()] = values.join('').trim().replace(/'/g, "").replace(/"/g, "");
+            varsObj[name.trim()] = values.join('=').trim().replace(/'/g, "").replace(/"/g, "");
         }
     }
     varsObj.content = converter.makeHtml(matches[2].trim());
