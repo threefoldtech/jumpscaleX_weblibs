@@ -1,17 +1,60 @@
 const BASE_URL = "/docsites"
 var converter = new showdown.Converter();
 
+
+// A simple request cache with expiration
+// because we only do get requests
+function DocsiteRequestsCache() {
+    this.keyPrefix = 'DocsiteCache';
+    this.expireIn = 7200; // seconds
+}
+
+DocsiteRequestsCache.prototype.getKey = function (url) {
+    return this.keyPrefix + '_' + url;
+};
+DocsiteRequestsCache.prototype.getData = function (value) {
+    var self = this;
+    return JSON.stringify({
+        value: value,
+        expireIn: Date.now() + self.expireIn * 1000
+    });
+};
+DocsiteRequestsCache.prototype.set = function (url, value) {
+    localStorage.setItem(this.getKey(url), this.getData(value));
+};
+DocsiteRequestsCache.prototype.get = function (url) {
+    var self = this;
+
+    var data = localStorage.getItem(self.getKey(url));
+    if (data) {
+        data = JSON.parse(data);
+        if (data.expireIn >= Date.now()) {
+            return data.value;
+        }
+    }
+};
+
 function DocSite(onLoaded) {
     this.docsiteLoaded = onLoaded || function () { };
+    this.cache = new DocsiteRequestsCache();
 }
 
 DocSite.prototype.makeRequest = function (url, varsObj) {
     var self = this;
     var request = new XMLHttpRequest();
+
     return new Promise(function (resolve, reject) {
+        var cached = self.cache.get(url);
+        if (cached) {
+            self.parseResponse(cached, varsObj);
+            resolve();
+            return;
+        }
+
         request.onreadystatechange = function () {
             if (request.readyState !== 4) return;
             if (request.status >= 200 && request.status < 300) {
+                self.cache.set(url, request.responseText);
                 self.parseResponse(request.responseText, varsObj);
                 resolve()
             } else {
@@ -143,5 +186,5 @@ DocSite.prototype.onWindowLoaded = function () {
     });
 };
 DocSite.prototype.init = function () {
-    window.addEventListener("load", this.onWindowLoaded.bind(this));
+    window.addEventListener("DOMContentLoaded", this.onWindowLoaded.bind(this));
 }
