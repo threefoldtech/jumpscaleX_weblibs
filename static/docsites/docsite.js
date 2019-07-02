@@ -1,7 +1,6 @@
 const BASE_URL = "/docsites"
 var converter = new showdown.Converter();
 
-
 // A simple request cache with expiration
 // because we only do get requests
 function DocsiteRequestsCache() {
@@ -9,8 +8,12 @@ function DocsiteRequestsCache() {
     this.expireIn = 7200; // seconds
 }
 
-DocsiteRequestsCache.prototype.getKey = function (url) {
-    return this.keyPrefix + '_' + url;
+DocsiteRequestsCache.prototype.getKey = function (url, postfix) {
+    let key = this.keyPrefix + '_' + url;
+    if (postfix) {
+        return key + '_' + postfix;
+    }
+    return key;
 };
 DocsiteRequestsCache.prototype.getData = function (value) {
     var self = this;
@@ -35,8 +38,10 @@ DocsiteRequestsCache.prototype.get = function (url) {
 };
 
 function DocSite(onLoaded) {
-    this.docsiteLoaded = onLoaded || function () { };
     this.cache = new DocsiteRequestsCache();
+    this.tokensKey = this.cache.getKey(window.location.pathname, 'tokens');
+
+    this.docsiteLoaded = onLoaded || function () { };
 }
 
 DocSite.prototype.makeRequest = function (url, varsObj) {
@@ -127,14 +132,8 @@ DocSite.prototype.getHandlebarsWithElements = function () {
 
     return all;
 }
-DocSite.prototype.onWindowLoaded = function () {
-    var self = this;
-    let handles = self.getHandlebarsWithElements();
-    let references = handles.map(function (handle) {
-        return handle.reference;
-    });
-    let tokenizer = Handlebars.parse(references.join("\n"));
-    let tokens = {}
+DocSite.prototype.getTokens = function (tokenizer) {
+    let tokens = {};
 
     for (let i in tokenizer.body) {
         const token = tokenizer.body[i];
@@ -152,7 +151,11 @@ DocSite.prototype.onWindowLoaded = function () {
         }
     }
 
-    // Get md pages
+    return tokens;
+};
+DocSite.prototype.fetchData = function (tokens, onSuccess) {
+    var self = this;
+    // Get values md pages
     promises = [];
     for (let docSite in tokens) {
         for (let mdPath in tokens[docSite]) {
@@ -166,24 +169,49 @@ DocSite.prototype.onWindowLoaded = function () {
         e => ({ e, status: "rejected" }));
 
     Promise.all(promises.map(reflect)).then(() => {
-        // update element by element
-        for (let i in handles) {
-            let handle = handles[i];
-            let value = Handlebars.compile(handle.reference)(tokens);
-            // value can be only text content or an html string
-            if (handle.attr) {
-                handle.element.setAttribute(handle.attr, value);
-            } else {
-                // if not an attribute, replace the element itself with a new fragment
-                // that contains one or more elements (or even a single text element)
-                let frag = document.createRange().createContextualFragment(value);
-                handle.element.replaceWith(frag);
-            }
-        }
-        // remove loading div
-        self.removeLoadingDiv();
-        self.docsiteLoaded();
+        onSuccess();
     });
+};
+DocSite.prototype.populateData = function (handles, tokens) {
+    var self = this;
+
+    // update element by element
+    for (let i in handles) {
+        let handle = handles[i];
+        let value = Handlebars.compile(handle.reference)(tokens);
+        // value can be only text content or an html string
+        if (handle.attr) {
+            handle.element.setAttribute(handle.attr, value);
+        } else {
+            // if not an attribute, replace the element itself with a new fragment
+            // that contains one or more elements (or even a single text element)
+            let frag = document.createRange().createContextualFragment(value);
+            handle.element.replaceWith(frag);
+        }
+    }
+    // remove loading div
+    self.removeLoadingDiv();
+    self.docsiteLoaded();
+};
+DocSite.prototype.onWindowLoaded = function () {
+    var self = this;
+
+    handles = self.getHandlebarsWithElements();
+    let references = handles.map(function (handle) {
+        return handle.reference;
+    });
+
+    let tokens = self.cache.get(self.tokensKey);
+    if (!tokens) {
+        let tokenizer = Handlebars.parse(references.join("\n"));
+        tokens = self.getTokens(tokenizer);
+        self.fetchData(tokens, function () {
+            self.populateData(handles, tokens);
+            self.cache.set(self.tokensKey, tokens);
+        })
+    } else {
+        self.populateData(handles, tokens);
+    }
 };
 DocSite.prototype.init = function () {
     window.addEventListener("DOMContentLoaded", this.onWindowLoaded.bind(this));
