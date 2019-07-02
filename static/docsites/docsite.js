@@ -5,7 +5,7 @@ var converter = new showdown.Converter();
 // because we only do get requests
 function DocsiteRequestsCache() {
     this.keyPrefix = 'DocsiteCache';
-    this.expireIn = 7200; // seconds
+    this.expireIn = 120000; // 2m as milliseconds
 }
 
 DocsiteRequestsCache.prototype.getKey = function (url, postfix) {
@@ -19,7 +19,7 @@ DocsiteRequestsCache.prototype.getData = function (value) {
     var self = this;
     return JSON.stringify({
         value: value,
-        expireIn: Date.now() + self.expireIn * 1000
+        expireIn: Date.now() + self.expireIn
     });
 };
 DocsiteRequestsCache.prototype.set = function (url, value) {
