@@ -4,7 +4,7 @@ sonic_search = function (query)
         "namespace": "default",
         "actor": "sonic",
         "command": "query",
-        "args": {"collection":"docsites", "bucket":NAME, "text":query},
+        "args": {"name": NAME, "text":query},
         "headers": {"response_type":"json"}
     }
     console.log(info);

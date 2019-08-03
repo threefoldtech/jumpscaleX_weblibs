@@ -87,7 +87,7 @@ function genIndex(path, content, router, depth) {
 function search(query) {
     name = options.namespace
     console.log("before");
-    sonic_search(name, query).then((res) => {alert(res)})
+    sonic_search(query).then((res) => {alert(res)})
     console.log("after");
 }
 //  var matchingResults = [];
@@ -241,8 +241,11 @@ function doSearch(value) {
   sonic_search(value).then((res) => {
       var matches = JSON.parse(res)["res"]
       var html = '';
+      console.log("searching for " + value)
+      console.log("found results")
+      console.log(res)
       matches.forEach(function (post) {
-        html += "<div class=\"matching-post\">\n<a href=\"#/" + (post) + "\">\n<h2>" + (post) + "</h2></a>\n</div>";
+        html += "<div class=\"matching-post\">\n<a href=\"#/" + (post) + ".md\">\n<h2>" + (post) + "</h2></a>\n</div>";
       });
 
       $panel.classList.add('show');
