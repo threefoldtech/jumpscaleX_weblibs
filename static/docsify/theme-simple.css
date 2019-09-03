@@ -1725,7 +1725,7 @@ body .sidebar {
 :root {
     --base-background-color: #fff;
     --base-color: var(--mono-shade2);
-    --base-font-family: "Lato", sans-serif;
+    --base-font-family: 'Lato', sans-serif;
     --base-font-size: 16px;
     --base-line-height: 1.7;
     --emoji-size: calc(var(--base-line-height) * 1em);
@@ -1745,7 +1745,7 @@ body .sidebar {
     --blockquote-background: var(--mono-tint3);
     --blockquote-border-style: solid;
     --blockquote-border-radius: var(--border-radius-m);
-    --code-font-family: Inconsolata, Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+    --code-font-family: 'Lato', sans-serif;
     --code-font-size: calc(var(--font-size-m) * 0.95);
     --code-tab-size: 4;
     --code-block-border-radius: var(--border-radius-m);
