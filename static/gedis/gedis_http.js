@@ -27,7 +27,7 @@ class GedisHTTPClient {
 }
 
 
-const localGedisClient = new GedisHTTPClient(`${location.protocol}//${location.hostname}/actors`)
+const localGedisClient = new GedisHTTPClient(`${location.protocol}//${location.hostname}/api/actors`)
 
 /*
 localGedisClient.executeCommand("alerta", "list_alerts").then( (resp) => console.log(resp.json()))
