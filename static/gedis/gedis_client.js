@@ -4,7 +4,7 @@ const GEDIS_CLIENT = (function () {
     if(location.protocol == "https:"){
         protocol = "wss:"
     }
-    let server = protocol + "//" + location.hostname + ":4444"
+    let server = protocol + "//" + location.hostname + "/web/gedis/websocket"
     client.socket = new WebSocket(server);
     client.connected = false
     let connect = () => {
