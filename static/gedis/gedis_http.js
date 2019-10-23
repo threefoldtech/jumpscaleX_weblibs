@@ -1,7 +1,33 @@
+class ActorsCollection {
+    constructor(actorName, client) {
+        this.actorName = actorName
+        let actorHandler = {
+            get(target, name) {
+                let returned_func = function (actorArgs = {}, fetchOpts = {}) {
+                    this.actorCmd = name
+                    return client.executeCommand(actorName, name, actorArgs, fetchOpts);
+                }
+                return returned_func
+            }
+        }
+        return new Proxy(client, actorHandler)
+    }
+}
 class GedisHTTPClient {
     constructor(baseURL) {
         this.baseURL = baseURL
+        this.client = this
+        this.actorsCollectionHandler = {
+            get(target, name) {
+                return new ActorsCollection(name, target)
+            }
+        }
     }
+
+    get actors() {
+        return new Proxy(this.client, this.actorsCollectionHandler);
+    }
+
     executeCommand(actorName, actorCmd, actorArgs = {}, fetchOpts = {}) {
         const url = `${this.baseURL}/${actorName}/${actorCmd}`
         let mainOpts = {
@@ -31,4 +57,5 @@ const localGedisClient = new GedisHTTPClient(`${location.protocol}//${location.h
 
 /*
 localGedisClient.executeCommand("alerta", "list_alerts").then( (resp) => console.log(resp.json()))
+localGedisClient.actors.alerta.list_alerts().then((resp) => console.log(resp.json()))
 */
