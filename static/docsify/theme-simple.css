@@ -1694,11 +1694,11 @@ body .sidebar {
     --mono-tint1: hsl(var(--mono-hue), var(--mono-saturation), 70%);
     --mono-tint2: hsl(var(--mono-hue), var(--mono-saturation), 89%);
     --mono-tint3: hsl(var(--mono-hue), var(--mono-saturation), 97%);
-    --theme-hue: 204;
-    --theme-saturation: 90%;
-    --theme-lightness: 45%;
+    --theme-hue: 214;
+    --theme-saturation: 46%;
+    --theme-lightness: 48%;
     --theme-color: hsl(var(--theme-hue), var(--theme-saturation), var(--theme-lightness));
-    --modular-scale: 1.333;
+    --modular-scale: 1;
     --modular-scale--2: calc(var(--modular-scale-2) / var(--modular-scale));
     --modular-scale--1: calc(var(--modular-scale-1) / var(--modular-scale));
     --modular-scale-1: 1rem;
@@ -1985,7 +1985,7 @@ body .sidebar {
     --sidebar-border-color: var(--mono-tint2);
     --sidebar-border-width: 0 1px 0 0;
     --sidebar-name-color: var(--theme-color);
-    --sidebar-name-font-weight: 300;
+    --sidebar-name-font-weight: 600;
     --sidebar-nav-strong-border-width: 0 0 1px 0;
     --sidebar-nav-strong-font-size: smaller;
     --sidebar-nav-strong-margin: 2em -25px 0.75em 0;
