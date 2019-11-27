@@ -1,11 +1,11 @@
-class ActorsCollection {
-    constructor(actorName, client) {
+class PackageActorsCollection {
+    constructor(packageAuthor, packageName, actorName, client) {
         this.actorName = actorName
         let actorHandler = {
             get(target, name) {
                 let returned_func = function (actorArgs = {}, fetchOpts = {}) {
                     this.actorCmd = name
-                    return client.executeCommand(actorName, name, actorArgs, fetchOpts);
+                    return client.executeCommand(packageAuthor, packageName, actorName, name, actorArgs, fetchOpts);
                 }
                 return returned_func
             }
@@ -13,13 +13,14 @@ class ActorsCollection {
         return new Proxy(client, actorHandler)
     }
 }
-class GedisHTTPClient {
-    constructor(baseURL) {
+
+class PackageGedisHTTPClient {
+    constructor(packageAuthor, packageName, baseURL) {
         this.baseURL = baseURL
         this.client = this
         this.actorsCollectionHandler = {
             get(target, name) {
-                return new ActorsCollection(name, target)
+                return new PackageActorsCollection(packageAuthor, packageName, name, target)
             }
         }
     }
@@ -28,8 +29,8 @@ class GedisHTTPClient {
         return new Proxy(this.client, this.actorsCollectionHandler);
     }
 
-    executeCommand(actorName, actorCmd, actorArgs = {}, fetchOpts = {}) {
-        const url = `${this.baseURL}/${actorName}/${actorCmd}`
+    executeCommand(packageAuthor, packageName, actorName, actorCmd, actorArgs = {}, fetchOpts = {}) {
+        const url = `${this.baseURL}/${packageAuthor}/${packageName}/actors/${actorName}/${actorCmd}`
         let mainOpts = {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             mode: 'cors', // no-cors, *cors, same-origin
@@ -53,9 +54,18 @@ class GedisHTTPClient {
 }
 
 
-const localGedisClient = new GedisHTTPClient(`${location.protocol}//${location.hostname}/web/gedis/http`)
-const tfGridGedisClient = new GedisHTTPClient(`https://explorer.testnet.grid.tf/web/gedis/http`)
-/*
-localGedisClient.executeCommand("alerta", "list_alerts").then( (resp) => console.log(resp.json()))
-localGedisClient.actors.alerta.list_alerts().then((resp) => console.log(resp.json()))
-*/
+class BaseGedisHTTPClient {
+    constructor(baseURL) {
+        return new Proxy({}, {
+            get: function (outerTarget, packageAuthor) {
+                return new Proxy({}, {
+                    get: function (innerTarget, packageName) {
+                        return new PackageGedisHTTPClient(packageAuthor, packageName, baseURL);
+                    }
+                })
+            }
+        })
+    }
+}
+
+const packageGedisClient = new BaseGedisHTTPClient(`${location.protocol}//${location.hostname}`);
