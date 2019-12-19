@@ -53,8 +53,8 @@ class GedisHTTPClient {
 }
 
 
-const localGedisClient = new GedisHTTPClient(`${location.protocol}//${location.hostname}/web/gedis/http`)
-const tfGridGedisClient = new GedisHTTPClient(`https://explorer.testnet.grid.tf/web/gedis/http`)
+const localGedisClient = new GedisHTTPClient(`${location.protocol}//${location.hostname}/gedis/http`)
+const tfGridGedisClient = new GedisHTTPClient(`https://explorer.testnet.grid.tf/gedis/http`)
 
 /*
 localGedisClient.executeCommand("alerta", "list_alerts").then( (resp) => console.log(resp.json()))
