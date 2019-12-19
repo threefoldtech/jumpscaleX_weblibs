@@ -32,7 +32,7 @@ TeamWidgetService.prototype = {
                         <div class="col-sm-8">
                             <div class="member-name">
                                 ${member.full_name}
-                                <a href="${member.linkedin}"><i class="fa fa-linkedin"></i></a>
+                                ${member.linkedin ? `<a href="${member.linkedin}" target="_blank"><i class="fab fa-linkedin 1x"></i></a>` : ""}
                             </div>
                             <div class="bio-excerpt">${member.description}</div>
                         </div>
