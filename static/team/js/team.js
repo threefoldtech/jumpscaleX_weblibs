@@ -30,7 +30,10 @@ TeamWidgetService.prototype = {
                     <div class="row">
                         <div class="col-sm-4"><img src="${member.avatar}"></div>
                         <div class="col-sm-8">
-                            <div class="member-name">${member.full_name}</div>
+                            <div class="member-name">
+                                ${member.full_name}
+                                <a href="${member.linkedin}"><i class="fa fa-linkedin"></i></a>
+                            </div>
                             <div class="bio-excerpt">${member.description}</div>
                         </div>
                         <div class="close-bio">x</div>
