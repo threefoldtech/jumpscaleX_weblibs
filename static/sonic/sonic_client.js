@@ -1,4 +1,4 @@
 sonic_search = query => {
-    return localGedisClient.actors.sonic.query({ "name": NAME, "text": query })
+    return packageGedisClient.zerobot.webinterface.actors.wiki.find({ "name": NAME, "text": query })
         .then(res => res.json())
 }
