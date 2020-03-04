@@ -36,15 +36,17 @@ module.exports = new Promise(async (resolve, reject) => {
     },
     computed: { 
       ...vuex.mapGetters([
-        "nodes", 
-        "farms"
+        "registeredNodes", 
+        "registeredFarms",
+        "nodes"
       ]),
       // Parse nodelist to table format here
       parsedNodesList: function() {
-        const parsedNodes = this.nodes.map(node => {
+        const nodeList = this.nodes ? this.nodes : this.registeredNodes
+        const parsedNodes = nodeList.filter(node => !this.farmselected || (this.farmselected.id === node.farm_id)).map(node => {
           const uptime = moment.duration(node.uptime, "seconds").format();
 
-          const farmer = _.find(this.farms, farmer => {
+          const farmer = _.find(this.registeredFarms, farmer => {
             return farmer.id === node.farm_id;
           });
 
@@ -72,11 +74,13 @@ module.exports = new Promise(async (resolve, reject) => {
       }
     },
     mounted () {
-      this.getNodes();
+      this.resetNodes()
+      this.getRegisteredNodes()
     },
     methods: {
       ...vuex.mapActions([
-        "getNodes"
+        "getRegisteredNodes",
+        "resetNodes"
       ]),
       getStatus(node) {
         const { updated } = node;
