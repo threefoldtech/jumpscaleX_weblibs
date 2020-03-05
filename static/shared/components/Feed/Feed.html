@@ -33,7 +33,10 @@
       </slot>
       <slot name="interaction">
         <v-row class="mt-2 ml-2" v-if="showComments">
-            helllo comment
+            <v-row v-for="comment in post.comments" :key="comment.commentId">
+              <p>{{ comment.author }}</p>
+              <p>{{ comment.body }}</p>
+            </v-row>
         </v-row>
       </slot>
     </v-col>
