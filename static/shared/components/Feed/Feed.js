@@ -7,6 +7,7 @@ module.exports = new Promise(async (resolve, reject) => {
   resolve({
     name: "Feed",
     components: {
+      comment: httpVueLoader("/weblibs/shared/components/Comment/index.vue")
     },
     props: ['post', 'loading'],
     data() {
@@ -19,19 +20,20 @@ module.exports = new Promise(async (resolve, reject) => {
         return moment(this.post.created).format('LLL')
       }
     },
+    mounted() {
+      if (this.post.id == 0) {
+        this.displayComments()
+      }
+    },
     methods: {
+      ...vuex.mapActions([
+        "getComments"
+      ]),
       displayComments () {
         console.log("displaying comments")
         this.showComments = !this.showComments;
-        this.getComments()
-      },
-      getComments() {
-        if (this.showComments) {
-          postService.default.getComments(this.post.commentsCount).then(response => {
-            this.$emit('update-comments', response.data.comments)
-          }).catch(e => {
-            console.log(e)
-          })
+        if(this.showComments){
+          this.getComments(this.post.id)
         }
       }
     },

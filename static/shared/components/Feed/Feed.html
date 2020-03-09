@@ -1,15 +1,22 @@
-<section class="add">
-  <v-card class="pa-1" :loading="loading">
-    <v-row class="ma-1" align="center">
+<section class="feed">
+  <v-card class="ma-0 pa-0" :loading="loading">
+    <v-row class="ma-1 pa-1" align="center">
       <slot name="header">
         <v-col cols='1' justify="center" align="center">
-          <v-avatar size="40" class="grey">
+          <v-avatar size="50" class="grey">
             <img :src="`https://api.adorable.io/avatars/${post.author.id}`" alt="John">
           </v-avatar>
         </v-col>
         <v-col>
-          <p class="title my-0 py-0">{{post.author.name}}</p>
-          <p class="subtitle-2 my-0 py-0">{{formattedDate}}</p>
+          <v-row align="center">
+            <v-col>
+              <p class="title my-0 py-0"><a class="secondary--text">{{post.author.name}}</a></p>
+              <p class="subtitle-2 my-0 py-0">{{formattedDate}}</p>
+            </v-col>
+              <v-btn text small>
+                <v-icon color="grey darken-2" small left>fas fa-ellipsis-v</v-icon>
+              </v-btn>
+          </v-row>
         </v-col>
       </slot>
     </v-row>
@@ -31,14 +38,11 @@
           </v-btn>
         </v-row>
       </slot>
-      <slot name="interaction">
-        <v-row class="mt-2 ml-2" v-if="showComments">
-            <v-row v-for="comment in post.comments" :key="comment.commentId">
-              <p>{{ comment.author }}</p>
-              <p>{{ comment.body }}</p>
-            </v-row>
-        </v-row>
-      </slot>
+      <v-row class="mt-2 pt-2 borderTop grey lighten-5" v-if="showComments">
+        <slot name="comment" v-for="comment in post.comments">
+          <comment :comment="comment" :key="`comment-${comment.commentId}`"/>
+        </slot>
+      </v-row>
     </v-col>
   </v-card>
 </section>
