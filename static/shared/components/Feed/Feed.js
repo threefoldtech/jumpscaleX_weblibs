@@ -21,9 +21,9 @@ module.exports = new Promise(async (resolve, reject) => {
       }
     },
     mounted() {
-      if (this.post.id == 0) {
-        this.displayComments()
-      }
+      // if (this.post.id == 0) {
+      //   this.displayComments()
+      // }
     },
     methods: {
       ...vuex.mapActions([
