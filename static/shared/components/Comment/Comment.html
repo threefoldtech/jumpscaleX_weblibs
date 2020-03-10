@@ -1,30 +1,27 @@
-<section class="comment mt-3">
-    <v-row class="mx-1" align="top">
-        <v-col cols='1' align="center">
-          <v-btn text icon small>
-            <v-icon color="primary lighten-5" small>fas fa-caret-up</v-icon>
-          </v-btn>
-          <v-avatar size="40">
-            <span >5</span>
-          </v-avatar>
-          <v-btn text icon small>
-            <v-icon color="primary lighten-5" small>fas fa-caret-down</v-icon>
-          </v-btn>
-        </v-col>
-        <v-col class="pb-0">
-          <v-row align="center" class="mx-0">
-            <v-avatar size="20" class="mr-2">
-              <img :src="`https://api.adorable.io/avatars/${comment.author.id}`" alt="John" />
-            </v-avatar>
-            <p class="title my-0 py-0"><a class="secondary--text">
-              {{comment.author.name}}</a>
-            <span class="subtitle-2 my-0 py-0">{{formattedDate}}</span></p>
-          </v-row>
-          <p class="mb-0">{{comment.body}}</p>
-        </v-col>
+<section class="comment">
+  <v-row>
+    <v-col cols="1"  align="center">
+      <v-btn text icon small>
+        <v-icon color="primary lighten-5" small>fas fa-caret-up</v-icon>
+      </v-btn>
+      <v-avatar size="40">
+        <span >5</span>
+      </v-avatar>
+      <v-btn text icon small>
+        <v-icon color="primary lighten-5" small>fas fa-caret-down</v-icon>
+      </v-btn>
+    </v-col>
+    <v-col>
+      <v-row align="center" class="mx-0">
+        <v-avatar size="20" class="mr-2">
+          <img :src="`https://api.adorable.io/avatars/${comment.author.id}`" alt="John" />
+        </v-avatar>
+        <p class="title my-0 py-0"><a class="secondary--text">
+          {{comment.author.name}}</a>
+        <span class="subtitle-2 my-0 py-0">{{formattedDate}}</span></p>
       </v-row>
-      <v-row justify='center' align="center" class="mx-2 mb-3">
-        <v-col cols="1"></v-col>
+      <p class="mb-0">{{comment.body}}</p>
+      <v-row justify='center' align="center" class="my-1">
         <v-btn fab icon text small>
           <v-icon color="primary lighten-5" small>fas fa-comment</v-icon>
         </v-btn>
@@ -33,6 +30,7 @@
         </v-btn>
         <v-col>
           <v-divider />
-        </v-col>
-      </v-row>        
+      </v-col>
+    </v-col>
+  </v-row>
 </section>
