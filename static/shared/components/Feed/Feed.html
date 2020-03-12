@@ -20,20 +20,20 @@
       </slot>
       <slot name="interaction">
         <v-row class="mt-2 ml-2" align='center'>
-          <v-btn class="mr-1" text small :icon="!post.likesCount">
-            <v-icon color="grey darken-2" small :left="post.likesCount">fas fa-thumbs-up</v-icon>
-            {{post.likesCount}}
+          <v-btn class="mr-1" text small :icon="!post.likeCount">
+            <v-icon color="grey darken-2" small :left="post.likeCount">fas fa-thumbs-up</v-icon>
+            {{post.likeCount}}
           </v-btn>
-          <v-btn class="mx-1" text small :icon="!post.likesCount">
-            <v-icon color="grey darken-2 nl-3" small :left="post.likesCount">fas fa-thumbs-down</v-icon>
-            {{post.likesCount}}
+          <v-btn class="mx-1" text small :icon="!post.dislikeCount">
+            <v-icon color="grey darken-2 nl-3" small :left="post.dislikeCount">fas fa-thumbs-down</v-icon>
+            {{post.dislikeCount}}
           </v-btn>
           <v-btn class="mx-1" text small @click="displayComments" :icon="!post.commentsCount">
             <v-icon color="grey darken-2" small :left="post.commentsCount">fas fa-comment</v-icon>
             {{post.commentsCount}}
           </v-btn>
           <v-btn class="mx-1" text small icon>
-            <v-icon color="grey darken-2" small >fas fa-share-alt</v-icon>
+            <v-icon color="grey darken-2" small>fas fa-share-alt</v-icon>
           </v-btn>
         </v-row>
       </slot>
