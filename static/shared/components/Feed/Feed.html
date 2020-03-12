@@ -6,7 +6,7 @@
           <slot name="header">
             <v-col cols='1' justify="center" align="end">
               <v-avatar size="50" class="grey">
-                <img :src="`https://api.adorable.io/avatars/${post.author.id}`" alt="John">
+                <img :src="post.author.avatar" alt="John">
               </v-avatar>
             </v-col>
             <v-col>
@@ -23,15 +23,15 @@
             <v-row class="mt-2 ml-2" align='center'>
               <v-btn text small>
                 <v-icon color="grey darken-2" small left>fas fa-thumbs-up</v-icon>
-                {{post.likesCount}}
+                {{post.likeCount}}
               </v-btn>
               <v-btn text small>
                 <v-icon color="grey darken-2 nl-3" small left>fas fa-thumbs-down</v-icon>
-                {{post.likesCount}}
+                {{post.dislikeCount}}
               </v-btn>
               <v-btn text small @click="displayComments">
                 <v-icon color="grey darken-2" small left>fas fa-comment</v-icon>
-                {{post.commentsCount}}
+                {{post.commentCount}}
               </v-btn>
               <v-btn text small>
                 <v-icon color="grey darken-2" small left>fas fa-share-alt</v-icon>

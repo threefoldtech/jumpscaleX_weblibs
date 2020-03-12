@@ -17,7 +17,8 @@ module.exports = new Promise(async (resolve, reject) => {
     },
     computed: {
       formattedDate() {
-        return moment(this.post.created).format('LLL')
+        console.log(this.post)
+        return moment.unix(this.post.created).format('LLL')
       }
     },
     mounted() {
