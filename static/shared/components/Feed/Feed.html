@@ -21,11 +21,11 @@
           </slot>
           <slot name="interaction">
             <v-row class="mt-2 ml-2" align='center'>
-              <v-btn text small>
+              <v-btn text small @click="submitVote('like')">
                 <v-icon color="grey darken-2" small left>fas fa-thumbs-up</v-icon>
                 {{post.likeCount}}
               </v-btn>
-              <v-btn text small>
+              <v-btn text small @click="submitVote('dislike')">
                 <v-icon color="grey darken-2 nl-3" small left>fas fa-thumbs-down</v-icon>
                 {{post.dislikeCount}}
               </v-btn>
@@ -44,11 +44,22 @@
         <v-icon color="grey darken-2" small left>fas fa-ellipsis-v</v-icon>
       </v-btn>
     </v-row>
-    <v-col class="grey lighten-5" v-if="showComments">
-      <slot name="comment" v-for="comment in post.comments">
-        <comment :comment="comment" :key="`comment-${comment.commentId}`" />
-      </slot>
-      </v-row>
+      <v-col class="grey lighten-5" v-if="showComments">
+        <p class="grey--text" align="center" v-if="post.comments.length == 0">
+          There are no comments yet
+        </p>
+        <slot name="comment">
+          <v-row dense v-for="comment in post.comments">
+            <comment :comment="comment" :key="`comment-${comment.commentId}`" />
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <v-text-field v-model="commentBody" placeholder="Write your comment here ..."
+                @keydown.enter="submitComment"></v-text-field>
+            </v-col>
+          </v-row>
+        </slot>
+    </v-row>
   </v-card>
 
 </section>

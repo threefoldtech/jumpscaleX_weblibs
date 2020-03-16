@@ -2,7 +2,6 @@
 module.exports = new Promise(async (resolve, reject) => {
   const vuex = await import("/weblibs/vuex/vuex.esm.browser.js");
   const { moment } = await import("/weblibs/moment/moment.min.js")
-  const postService = await import("/services/postServices.js")
 
   resolve({
     name: "Feed",
@@ -12,12 +11,15 @@ module.exports = new Promise(async (resolve, reject) => {
     props: ['post', 'loading'],
     data() {
       return{
-        showComments: false
+        showComments: false,
+        commentBody: null
       }
     },
     computed: {
+      ...vuex.mapGetters([
+        'user'
+      ]),
       formattedDate() {
-        console.log(this.post)
         return moment.unix(this.post.created).format('LLL')
       }
     },
@@ -28,7 +30,9 @@ module.exports = new Promise(async (resolve, reject) => {
     },
     methods: {
       ...vuex.mapActions([
-        "getComments"
+        "getComments",
+        "addVote",
+        "addComment"
       ]),
       displayComments () {
         console.log("displaying comments")
@@ -36,6 +40,30 @@ module.exports = new Promise(async (resolve, reject) => {
         if(this.showComments){
           this.getComments(this.post.id)
         }
+      },
+      submitVote (vote) {
+        console.log('this',this.post)
+        this.addVote({
+          post_id: this.post.id,
+          vote: {
+            type: vote,
+            user: this.user.id
+          }
+        })
+        console.log("voting ...", vote)
+      },
+      submitComment () {
+        this.addComment({
+          post_id: this.post.id,
+          comment: {
+            type: "comment",
+            author: {
+              name: "Dean Verjans",
+              avatar: "https://api.adorable.io/avatars/1"
+            },
+            body: this.commentBody
+          }
+        })
       }
     },
   })

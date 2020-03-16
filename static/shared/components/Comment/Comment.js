@@ -15,7 +15,7 @@ module.exports = new Promise(async (resolve, reject) => {
     },
     computed: {
       formattedDate() {
-        return moment(this.comment.created).format('LLL')
+        return moment.unix((this.comment.created)).format('LLL')
       }
     },
     methods: {
