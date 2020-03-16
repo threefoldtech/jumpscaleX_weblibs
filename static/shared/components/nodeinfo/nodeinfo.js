@@ -10,7 +10,7 @@ module.exports = {
   },
   methods: {
     getPercentage(type) {
-      return (this.node.usedResources[type] / this.node.totalResources[type]) * 100
+      return (this.node.reservedResources[type] / this.node.totalResources[type]) * 100
     }
   }
 }
