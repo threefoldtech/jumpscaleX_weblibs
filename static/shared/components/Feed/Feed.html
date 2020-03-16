@@ -1,49 +1,47 @@
 <section class="feed">
-  <v-card class="ma-0 pa-0" :loading="loading">
-    <v-row>
-      <v-col class="ma-0">
-        <v-row class="mx-3 py-0" align="center">
-          <slot name="header">
-            <v-col cols='1' justify="center" align="end">
-              <v-avatar size="50" class="grey">
-                <img :src="post.author.avatar" alt="John">
-              </v-avatar>
-            </v-col>
-            <v-col>
-              <p class="title my-0 py-0"><a class="secondary--text">{{post.author.name}}</a></p>
-              <p class="subtitle-2 my-0 py-0">{{formattedDate}}</p>
-            </v-col>
-          </slot>
-        </v-row>
-        <v-col class="pt-0 mt-0" justify="start">
-          <slot name="body">
-            {{post.title}}
-          </slot>
-          <slot name="interaction">
-            <v-row class="mt-2 ml-2" align='center'>
-              <v-btn text small @click="submitVote('like')">
-                <v-icon color="grey darken-2" small left>fas fa-thumbs-up</v-icon>
-                {{post.likeCount}}
-              </v-btn>
-              <v-btn text small @click="submitVote('dislike')">
-                <v-icon color="grey darken-2 nl-3" small left>fas fa-thumbs-down</v-icon>
-                {{post.dislikeCount}}
-              </v-btn>
-              <v-btn text small @click="displayComments">
-                <v-icon color="grey darken-2" small left>fas fa-comment</v-icon>
-                {{post.commentCount}}
-              </v-btn>
-              <v-btn text small>
-                <v-icon color="grey darken-2" small left>fas fa-share-alt</v-icon>
-              </v-btn>
-            </v-row>
-          </slot>
+  <v-card :loading="loading">
+    <v-row class="mx-3" align="center">
+      <slot name="header">
+        <v-avatar size="50" class="grey">
+          <img :src="post.author.avatar" alt="`profile pic of ${post.author.name}`">
+        </v-avatar>
+        <v-col class="my-0">
+          <p class="title my-0 py-0"><a class="secondary--text">{{post.author.name}}</a></p>
+          <p class="subtitle-2 my-0 py-0">{{formattedDate}}</p>
         </v-col>
-      </v-col>
-      <v-btn text small class="mt-2">
-        <v-icon color="grey darken-2" small left>fas fa-ellipsis-v</v-icon>
+      </slot>
+      <v-btn text small icon>
+        <v-icon color="grey darken-2" small>fas fa-ellipsis-v</v-icon>
       </v-btn>
     </v-row>
+    <v-col class="pt-0 mt-0" justify="start">
+      <slot name="body">
+        {{post.title}}
+      </slot>
+      <slot name="interaction">
+        <v-row class="mt-2 ml-2" align='center'>
+          <v-btn text small @click="submitVote('like')">
+            <v-icon color="grey darken-2" small left>fas fa-thumbs-up</v-icon>
+            {{post.likeCount}}
+          </v-btn>
+          <v-btn text small @click="submitVote('dislike')">
+            <v-icon color="grey darken-2 nl-3" small left>fas fa-thumbs-down</v-icon>
+            {{post.dislikeCount}}
+          </v-btn>
+          <v-btn text small @click="displayComments">
+            <v-icon color="grey darken-2" small left>fas fa-comment</v-icon>
+            {{post.commentCount}}
+          </v-btn>
+          <v-btn text small>
+            <v-icon color="grey darken-2" small left>fas fa-share-alt</v-icon>
+          </v-btn>
+        </v-row>
+      </slot>
+    </v-col>
+    </slot>
+    </v-row>
+
+    <slot name="comment">
       <v-col class="grey lighten-5" v-if="showComments">
         <p class="grey--text" align="center" v-if="post.comments.length == 0">
           There are no comments yet
@@ -59,7 +57,8 @@
             </v-col>
           </v-row>
         </slot>
-    </v-row>
+        </v-row>
+    </slot>
   </v-card>
 
 </section>
