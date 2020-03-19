@@ -1,13 +1,13 @@
 <section class="comment">
   <v-row>
     <v-col cols="1" align="center">
-      <v-btn text icon small>
+      <v-btn text icon small @click="submitVote('like')">
         <v-icon color="primary lighten-5" small>fas fa-caret-up</v-icon>
       </v-btn>
       <v-avatar size="40">
-        <span>5</span>
+        <span>{{likeBalance}}</span>
       </v-avatar>
-      <v-btn text icon small>
+      <v-btn text icon small @click="submitVote('like')">
         <v-icon color="primary lighten-5" small>fas fa-caret-down</v-icon>
       </v-btn>
     </v-col>

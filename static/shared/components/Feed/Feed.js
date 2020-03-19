@@ -64,6 +64,7 @@ module.exports = new Promise(async (resolve, reject) => {
             body: this.commentBody
           }
         })
+        this.commentBody = ""
       }
     },
   })
