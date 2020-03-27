@@ -68,4 +68,4 @@ class BaseGedisHTTPClient {
     }
 }
 
-const packageGedisClient = new BaseGedisHTTPClient(`${location.protocol}//${location.hostname}`);
+const packageGedisClient = new BaseGedisHTTPClient(`${location.protocol}//${location.host}`);
